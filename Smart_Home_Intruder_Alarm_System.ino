@@ -75,14 +75,23 @@ void setGreenMode() {
 }
 
 // Blinking Red + Buzzing until button is pressed
+
 void triggerAlarm() {
-  while (true) {
+  unsigned long alarmStart = millis();
+
+  while (millis() - alarmStart < 300000UL) {  // 5 minutes
     digitalWrite(redLedPin, LED_ON);
     tone(buzzerPin, 2500);
+
     if (waitAndCheckButton(150)) return;
 
     digitalWrite(redLedPin, LED_OFF);
     tone(buzzerPin, 1800);
+
     if (waitAndCheckButton(150)) return;
   }
+
+  // Automatically stop alarm after 5 minutes
+  setGreenMode();
 }
+
